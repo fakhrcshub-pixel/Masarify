@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مصاريفي - لوحة التحكم</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: "#eef4ff",
+                100: "#dce7ff",
+                500: "#1135cb",
+                600: "#0f2fb6",
+                700: "#0a2490"
+              },
+              success: "#0f9f6e",
+              danger: "#c62828",
+              warning: "#d97706",
+              slate: {
+                25: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                300: "#cbd5e1",
+                500: "#64748b",
+                700: "#334155",
+                900: "#0f172a"
+              }
+            },
+            fontFamily: {
+              cairo: ["Cairo", "sans-serif"]
+            },
+            boxShadow: {
+              soft: "0 18px 45px -20px rgba(17, 53, 203, 0.22)"
+            }
+          }
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body
+    data-page="dashboard"
+    class="min-h-screen bg-slate-25 font-cairo text-slate-900"
+  >
+    <div id="toastContainer" class="pointer-events-none fixed inset-x-4 top-4 z-50 flex flex-col gap-3 sm:left-auto sm:right-4 sm:w-full sm:max-w-sm"></div>
+
+    <header class="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3">
+          <img
+            src="assets/logo.png"
+            alt="شعار مصاريفي"
+            class="h-11 w-11 rounded-2xl object-cover shadow-soft"
+          />
+          <div>
+            <h1 class="text-xl font-extrabold text-brand-500">مصاريفي</h1>
+            <p id="currentMonthLabel" class="text-sm text-slate-500">جاري تحميل بيانات الشهر الحالي...</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="hidden items-center gap-3 rounded-full bg-slate-100 px-3 py-2 sm:flex">
+            <div
+              id="userAvatar"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-extrabold text-white"
+            >
+              م
+            </div>
+            <div class="text-right">
+              <p id="userName" class="text-sm font-bold text-slate-900">مستخدم مصاريفي</p>
+              <p id="userEmail" class="text-xs text-slate-500">...</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            id="logoutButton"
+            class="inline-flex items-center gap-2 rounded-full border border-brand-500 bg-white px-4 py-2 text-sm font-bold text-brand-600 transition hover:bg-brand-50"
+          >
+            <span class="material-symbols-outlined text-base">logout</span>
+            تسجيل الخروج
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto flex max-w-7xl flex-col gap-6 px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <section class="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <div class="rounded-[2rem] bg-gradient-to-br from-brand-500 to-brand-700 p-6 text-white shadow-soft">
+          <div class="flex flex-col gap-5 rounded-[1.75rem] bg-white/10 p-6 backdrop-blur">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="text-sm font-bold text-white/80">ملخص الميزانية</p>
+                <h2 class="mt-2 text-3xl font-extrabold">رؤية واضحة لنفقات هذا الشهر</h2>
+              </div>
+              <button
+                type="button"
+                id="openBudgetModalButton"
+                class="inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/25"
+              >
+                <span class="material-symbols-outlined text-base">edit</span>
+                تعديل الميزانية
+              </button>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-3">
+              <article class="rounded-3xl bg-white/10 p-4">
+                <p class="text-sm text-white/80">الميزانية المعتمدة</p>
+                <p id="budgetAmount" class="mt-3 text-3xl font-extrabold">0.00 ر.س</p>
+              </article>
+              <article class="rounded-3xl bg-white/10 p-4">
+                <p class="text-sm text-white/80">إجمالي المصروفات</p>
+                <p id="totalExpensesAmount" class="mt-3 text-3xl font-extrabold">0.00 ر.س</p>
+              </article>
+              <article class="rounded-3xl bg-white/10 p-4">
+                <p class="text-sm text-white/80">المتبقي من الميزانية</p>
+                <p id="remainingAmount" class="mt-3 text-3xl font-extrabold">0.00 ر.س</p>
+              </article>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-sm font-bold">
+                <span>نسبة الاستهلاك</span>
+                <span id="budgetUsageLabel">0%</span>
+              </div>
+              <div class="h-3 overflow-hidden rounded-full bg-white/20">
+                <div
+                  id="budgetProgressBar"
+                  class="h-full rounded-full bg-emerald-300 transition-all duration-300"
+                  style="width: 0%"
+                ></div>
+              </div>
+              <p id="budgetHint" class="text-sm text-white/80">
+                أضف ميزانيتك الشهرية لتبدأ مقارنة الإنفاق تلقائياً.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="grid gap-4">
+          <article class="rounded-[2rem] bg-white p-6 shadow-soft">
+            <div class="flex items-center gap-3">
+              <div class="rounded-2xl bg-brand-50 p-3 text-brand-600">
+                <span class="material-symbols-outlined">calendar_month</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-500">النطاق المعروض</p>
+                <p id="monthRangeText" class="text-lg font-extrabold text-slate-900">هذا الشهر</p>
+              </div>
+            </div>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+              يتم تحميل كل ما يقع بين أول يوم وآخر يوم من الشهر الحالي فقط. أي
+              مصروف خارج هذا النطاق يبقى محفوظاً في الأرشيف ولا يظهر هنا.
+            </p>
+          </article>
+
+          <article class="rounded-[2rem] bg-white p-6 shadow-soft">
+            <div class="flex items-center gap-3">
+              <div class="rounded-2xl bg-emerald-50 p-3 text-emerald-600">
+                <span class="material-symbols-outlined">verified_user</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-slate-500">الحماية</p>
+                <p class="text-lg font-extrabold text-slate-900">RLS مفعلة في Supabase</p>
+              </div>
+            </div>
+            <p class="mt-4 text-sm leading-7 text-slate-600">
+              يتم إرسال الاستعلامات للمستخدم الحالي فقط، ويجب أن تكون سياسات الصفوف
+              في قاعدة البيانات مطابقة لهذا السلوك.
+            </p>
+          </article>
+        </aside>
+      </section>
+
+      <section class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <section class="rounded-[2rem] bg-white p-6 shadow-soft">
+          <div class="flex items-center justify-between gap-4 border-b border-slate-200 pb-4">
+            <div>
+              <p class="text-sm font-bold text-brand-500">نموذج الإضافة</p>
+              <h2 class="text-2xl font-extrabold text-slate-900">إضافة مصروف جديد</h2>
+            </div>
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-500"
+              >التحقق مفعّل</span
+            >
+          </div>
+
+          <div
+            id="dashboardMessage"
+            class="mt-4 hidden rounded-2xl border px-4 py-3 text-sm font-semibold"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <form id="expenseForm" class="mt-6 space-y-4" novalidate>
+            <div>
+              <label for="expenseTitle" class="mb-2 block text-sm font-bold text-slate-700"
+                >عنوان المصروف</label
+              >
+              <input
+                id="expenseTitle"
+                name="title"
+                type="text"
+                maxlength="120"
+                class="block w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="مثال: غداء عمل"
+                required
+              />
+            </div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="expenseAmount" class="mb-2 block text-sm font-bold text-slate-700"
+                  >المبلغ</label
+                >
+                <div class="relative">
+                  <input
+                    id="expenseAmount"
+                    name="amount"
+                    type="number"
+                    inputmode="decimal"
+                    min="0"
+                    step="0.01"
+                    class="block w-full rounded-2xl border border-slate-200 px-4 py-3 pl-16 text-left text-slate-900 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                    placeholder="0.00"
+                    required
+                  />
+                  <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400"
+                    >ر.س</span
+                  >
+                </div>
+              </div>
+
+              <div>
+                <label for="expenseDate" class="mb-2 block text-sm font-bold text-slate-700"
+                  >التاريخ</label
+                >
+                <input
+                  id="expenseDate"
+                  name="date"
+                  type="date"
+                  class="block w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="expenseCategory" class="mb-2 block text-sm font-bold text-slate-700"
+                >التصنيف</label
+              >
+              <select
+                id="expenseCategory"
+                name="category"
+                class="block w-full rounded-2xl border border-slate-200 px-4 py-3 text-slate-900 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                required
+              >
+                <option value="">اختر التصنيف</option>
+                <option value="food">طعام</option>
+                <option value="transport">مواصلات</option>
+                <option value="bills">فواتير</option>
+                <option value="entertainment">ترفيه</option>
+                <option value="other">أخرى</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              id="submitExpenseButton"
+              class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 font-bold text-white shadow-soft transition hover:bg-emerald-700"
+            >
+              <span class="material-symbols-outlined text-base">add_circle</span>
+              إضافة المصروف
+            </button>
+          </form>
+        </section>
+
+        <section class="rounded-[2rem] bg-white p-6 shadow-soft">
+          <div class="flex flex-col gap-4 border-b border-slate-200 pb-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p class="text-sm font-bold text-brand-500">السجل الحي</p>
+              <h2 class="text-2xl font-extrabold text-slate-900">سجل المصروفات</h2>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div class="relative">
+                <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"
+                  >search</span
+                >
+                <input
+                  id="expenseSearch"
+                  type="search"
+                  class="block w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-3 pr-12 text-slate-900 outline-none transition focus:border-brand-500 focus:bg-white sm:w-72"
+                  placeholder="ابحث في المصروفات..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-2">
+            <button
+              type="button"
+              data-filter-button="all"
+              class="filter-chip is-active rounded-full px-4 py-2 text-sm font-bold"
+            >
+              الكل
+            </button>
+            <button
+              type="button"
+              data-filter-button="week"
+              class="filter-chip rounded-full px-4 py-2 text-sm font-bold"
+            >
+              هذا الأسبوع
+            </button>
+            <button
+              type="button"
+              data-filter-button="month"
+              class="filter-chip rounded-full px-4 py-2 text-sm font-bold"
+            >
+              هذا الشهر
+            </button>
+          </div>
+
+          <div class="mt-6 space-y-3" id="expenseList"></div>
+
+          <div
+            id="emptyState"
+            class="hidden rounded-[2rem] border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center"
+          >
+            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white text-brand-500 shadow-soft">
+              <span class="material-symbols-outlined text-3xl">receipt_long</span>
+            </div>
+            <h3 class="mt-4 text-xl font-extrabold text-slate-900">لا توجد مصروفات مطابقة</h3>
+            <p class="mt-2 text-sm leading-7 text-slate-600">
+              أضف أول مصروف أو غيّر كلمات البحث والفلاتر لرؤية النتائج.
+            </p>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div
+      id="budgetModal"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm"
+      aria-hidden="true"
+    >
+      <div class="w-full max-w-md rounded-[2rem] bg-white shadow-soft">
+        <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
+          <div>
+            <p class="text-sm font-bold text-brand-500">إدارة الميزانية</p>
+            <h2 class="text-2xl font-extrabold text-slate-900">تحديث ميزانية الشهر</h2>
+          </div>
+          <button
+            type="button"
+            id="closeBudgetModalButton"
+            class="rounded-full p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            aria-label="إغلاق نافذة الميزانية"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <form id="budgetForm" class="space-y-4 px-6 py-5" novalidate>
+          <div>
+            <label for="budgetInput" class="mb-2 block text-sm font-bold text-slate-700"
+              >الميزانية الشهرية</label
+            >
+            <div class="relative">
+              <input
+                id="budgetInput"
+                name="budget"
+                type="number"
+                inputmode="decimal"
+                min="0"
+                step="0.01"
+                class="block w-full rounded-2xl border border-slate-200 px-4 py-3 pl-16 text-left text-slate-900 shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
+                placeholder="0.00"
+                required
+              />
+              <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400"
+                >ر.س</span
+              >
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 font-bold text-white shadow-soft transition hover:bg-emerald-700"
+          >
+            <span class="material-symbols-outlined text-base">save</span>
+            حفظ الميزانية
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="assets/js/env.js" defer></script>
+    <script src="assets/js/config.js" defer></script>
+    <script src="assets/js/db.js" defer></script>
+    <script src="assets/js/auth.js" defer></script>
+    <script src="assets/js/ui.js" defer></script>
+  </body>
+</html>

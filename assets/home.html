@@ -1,0 +1,296 @@
+<!DOCTYPE html><html dir="rtl" lang="ar"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>مصاريفي - Masarify</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed": "#6ffbbe",
+                        "primary-fixed": "#dee0ff",
+                        "primary-container": "#3652e3",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed-variant": "#005236",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed": "#40000d",
+                        "background": "#f7f9fb",
+                        "on-primary-fixed": "#00105c",
+                        "outline-variant": "#c5c5d7",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#daddff",
+                        "tertiary-fixed": "#ffdadb",
+                        "tertiary-fixed-dim": "#ffb2b7",
+                        "surface": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-primary": "#bac3ff",
+                        "on-secondary-fixed": "#002113",
+                        "on-primary-fixed-variant": "#052fc7",
+                        "outline": "#757686",
+                        "error-container": "#ffdad6",
+                        "primary": "#1135cb",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#444655",
+                        "tertiary": "#99002c",
+                        "surface-dim": "#d8dadc",
+                        "secondary": "#006c49",
+                        "on-background": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-container": "#c2133e",
+                        "secondary-container": "#6cf8bb",
+                        "surface-container": "#eceef0",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#92002a",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#304dde",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#00714d",
+                        "surface-variant": "#e0e3e5",
+                        "on-surface": "#191c1e",
+                        "on-tertiary-container": "#ffd5d6",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#4edea3"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "4px",
+                        "gutter": "16px",
+                        "margin-desktop": "40px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "margin-mobile": "16px",
+                        "2xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px"
+                    },
+                    fontFamily: {
+                        "display-lg": ["Cairo"],
+                        "body-lg": ["Cairo"],
+                        "label-md": ["Cairo"],
+                        "body-md": ["Cairo"],
+                        "headline-lg-mobile": ["Cairo"],
+                        "headline-lg": ["Cairo"],
+                        "headline-md": ["Cairo"],
+                        "label-sm": ["Cairo"]
+                    },
+                    fontSize: {
+                        "display-lg": ["40px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.01em", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "1.3", fontWeight: "700" }],
+                        "headline-lg": ["32px", { lineHeight: "1.3", fontWeight: "700" }],
+                        "headline-md": ["20px", { lineHeight: "1.4", fontWeight: "600" }],
+                        "label-sm": ["12px", { lineHeight: "1.2", fontWeight: "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface fixed top-0 w-full z-50 shadow-[0_15px_15px_-3px_rgba(0,0,0,0.04)] dark:shadow-none">
+<div class="flex flex-row-reverse justify-between items-center px-margin-mobile md:px-margin-desktop h-16 w-full">
+<div class="flex items-center gap-sm flex-row-reverse">
+<img alt="Masarify Logo" class="h-8 w-8 rounded-DEFAULT object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVxfJd8bJaoplcra2bOcRrg0Jf8Doq0M_Lkl_y3ytOzZQbGF6umINoTTSs7brkX0nqU9OL2pZKOebGl4aRUaBqxkPnTeirMGfHtmyQ0uqAm5IVtlPppKs_GcDUCwYdlk2ZeSSzjVlXpB1kzx4I_VG9anFHGri4X-JEzmwWGPgFlkRLkFbN9llZYGk2qWefNmnJC3M18amLAwLdNxkksBVOnOEK3l2Lq28zlS-OW73EZOIIf5edCn1fnYYPPxtWIehh-vy_QFBDTAg">
+<span class="font-display-lg text-display-lg text-primary dark:text-inverse-primary" style="font-size: 24px;">مصاريفي</span>
+</div>
+<nav class="hidden md:flex gap-lg flex-row-reverse">
+<a class="font-body-md text-body-md text-primary dark:text-inverse-primary font-bold border-b-2 border-primary pb-1" href="#">الرئيسية</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary-container dark:hover:text-primary-fixed-dim transition-colors pb-1" href="#">المميزات</a>
+</nav>
+<div class="flex items-center gap-md">
+<button class="font-label-md text-label-md text-primary hover:text-primary-container transition-colors active:scale-95 transition-transform" onclick="openModal()">تسجيل الدخول</button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<main class="flex-grow flex items-center justify-center pt-24 pb-16 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-4xl w-full text-center flex flex-col items-center">
+<div class="mb-lg">
+<img alt="Masarify Logo" class="w-24 h-24 rounded-lg shadow-sm mx-auto mb-md" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVxfJd8bJaoplcra2bOcRrg0Jf8Doq0M_Lkl_y3ytOzZQbGF6umINoTTSs7brkX0nqU9OL2pZKOebGl4aRUaBqxkPnTeirMGfHtmyQ0uqAm5IVtlPppKs_GcDUCwYdlk2ZeSSzjVlXpB1kzx4I_VG9anFHGri4X-JEzmwWGPgFlkRLkFbN9llZYGk2qWefNmnJC3M18amLAwLdNxkksBVOnOEK3l2Lq28zlS-OW73EZOIIf5edCn1fnYYPPxtWIehh-vy_QFBDTAg">
+<h1 class="font-display-lg text-display-lg text-primary mb-sm">مصاريفي</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">تتبع نفقاتك بذكاء وسهولة مع واجهة حديثة وبسيطة. ابدأ رحلتك نحو الاستقرار المالي اليوم.</p>
+</div>
+<button class="bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-3 px-8 rounded-lg shadow-sm hover:shadow-[0_15px_15px_-3px_rgba(54,82,227,0.15)] transition-all active:scale-95" onclick="openModal()">
+                ابدأ الآن مجاناً
+            </button>
+<!-- Feature Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mt-2xl w-full">
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0_15px_15px_-3px_rgba(0,0,0,0.04)] border border-surface-container flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center mb-md text-primary">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">تتبع دقيق</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">سجل مصاريفك بسرعة وسهولة تامة.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0_15px_15px_-3px_rgba(0,0,0,0.04)] border border-surface-container flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center mb-md text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">تقارير ذكية</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">رسوم بيانية توضح أين يذهب مالك.</p>
+</div>
+<div class="bg-surface-container-lowest p-lg rounded-xl shadow-[0_15px_15px_-3px_rgba(0,0,0,0.04)] border border-surface-container flex flex-col items-center text-center">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center mb-md text-on-tertiary-fixed">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">أمان عالي</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">بياناتك مشفرة ومحفوظة بأمان.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-lg mt-auto bg-surface-container-low dark:bg-surface-dim">
+<div class="flex flex-col md:flex-row-reverse justify-between items-center px-margin-mobile md:px-margin-desktop gap-md">
+<div class="font-headline-md text-headline-md text-primary" style="font-size: 18px;">مصاريفي</div>
+<div class="flex gap-lg flex-row-reverse">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">الخصوصية</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">الشروط</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">اتصل بنا</a>
+</div>
+<div class="font-label-sm text-label-sm text-on-surface dark:text-on-surface-variant">© 2024 مصاريفي. جميع الحقوق محفوظة</div>
+</div>
+</footer>
+<!-- Auth Modal Overlay -->
+<div class="fixed inset-0 z-[100] hidden items-center justify-center bg-on-surface/20 backdrop-blur-sm opacity-0 transition-opacity duration-300" id="authModal">
+<div class="bg-surface-container-lowest w-full max-w-md rounded-xl shadow-[0_20px_40px_-5px_rgba(0,0,0,0.1)] overflow-hidden transform scale-95 transition-transform duration-300 relative border border-surface-container">
+<!-- Close Button -->
+<button class="absolute top-4 left-4 text-on-surface-variant hover:text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<!-- Modal Header -->
+<div class="p-lg border-b border-surface-container text-center bg-surface-bright">
+<img alt="Masarify Logo" class="w-12 h-12 rounded-DEFAULT mx-auto mb-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVxfJd8bJaoplcra2bOcRrg0Jf8Doq0M_Lkl_y3ytOzZQbGF6umINoTTSs7brkX0nqU9OL2pZKOebGl4aRUaBqxkPnTeirMGfHtmyQ0uqAm5IVtlPppKs_GcDUCwYdlk2ZeSSzjVlXpB1kzx4I_VG9anFHGri4X-JEzmwWGPgFlkRLkFbN9llZYGk2qWefNmnJC3M18amLAwLdNxkksBVOnOEK3l2Lq28zlS-OW73EZOIIf5edCn1fnYYPPxtWIehh-vy_QFBDTAg">
+<h2 class="font-headline-md text-headline-md text-on-surface">أهلاً بك في مصاريفي</h2>
+</div>
+<!-- Modal Body (Tabs) -->
+<div class="p-lg">
+<div class="flex border-b border-outline-variant mb-lg flex-row-reverse">
+<button class="flex-1 py-2 font-label-md text-label-md text-primary border-b-2 border-primary transition-colors" id="tabLogin" onclick="switchTab('login')">تسجيل الدخول</button>
+<button class="flex-1 py-2 font-label-md text-label-md text-on-surface-variant border-b-2 border-transparent hover:text-primary transition-colors" id="tabSignup" onclick="switchTab('signup')">حساب جديد</button>
+</div>
+<!-- Login Form -->
+<form class="flex flex-col gap-md" id="formLogin">
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-md text-label-md text-on-surface">البريد الإلكتروني</label>
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-right font-body-md text-body-md" dir="ltr" placeholder="user@example.com" type="email">
+</div>
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-md text-label-md text-on-surface">كلمة المرور</label>
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-right font-body-md text-body-md" dir="ltr" placeholder="••••••••" type="password">
+</div>
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-3 rounded-lg shadow-sm mt-sm transition-colors active:scale-95" type="button">الدخول</button>
+</form>
+<!-- Signup Form -->
+<form class="flex flex-col gap-md hidden" id="formSignup">
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-md text-label-md text-on-surface">الاسم الكامل</label>
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-right font-body-md text-body-md" placeholder="أحمد محمد" type="text">
+</div>
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-md text-label-md text-on-surface">البريد الإلكتروني</label>
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-right font-body-md text-body-md" dir="ltr" placeholder="user@example.com" type="email">
+</div>
+<div class="flex flex-col gap-xs text-right">
+<label class="font-label-md text-label-md text-on-surface">كلمة المرور</label>
+<input class="w-full px-4 py-2 rounded-lg border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-right font-body-md text-body-md" dir="ltr" placeholder="••••••••" type="password">
+</div>
+<button class="w-full bg-secondary hover:bg-[#005a3c] text-on-secondary font-label-md text-label-md py-3 rounded-lg shadow-sm mt-sm transition-colors active:scale-95" type="button">إنشاء حساب</button>
+</form>
+</div>
+</div>
+</div>
+<script>
+        const modal = document.getElementById('authModal');
+        const modalContent = modal.querySelector('div');
+        
+        function openModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay to allow display flex to apply before opacity transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Wait for transition to finish
+        }
+
+        // Close on clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        function switchTab(tab) {
+            const formLogin = document.getElementById('formLogin');
+            const formSignup = document.getElementById('formSignup');
+            const tabLogin = document.getElementById('tabLogin');
+            const tabSignup = document.getElementById('tabSignup');
+
+            const activeClass = ['text-primary', 'border-primary'];
+            const inactiveClass = ['text-on-surface-variant', 'border-transparent'];
+
+            if (tab === 'login') {
+                formLogin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+                
+                tabLogin.classList.add(...activeClass);
+                tabLogin.classList.remove(...inactiveClass);
+                
+                tabSignup.classList.remove(...activeClass);
+                tabSignup.classList.add(...inactiveClass);
+            } else {
+                formSignup.classList.remove('hidden');
+                formLogin.classList.add('hidden');
+                
+                tabSignup.classList.add(...activeClass);
+                tabSignup.classList.remove(...inactiveClass);
+                
+                tabLogin.classList.remove(...activeClass);
+                tabLogin.classList.add(...inactiveClass);
+            }
+        }
+    </script>
+
+
+</body></html>
