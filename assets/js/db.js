@@ -159,7 +159,7 @@
 
     const { error } = await getClient()
       .from("profiles")
-      .upsert(payload, { onConflict: "id" });
+      .upsert(payload, { onConflict: "id", ignoreDuplicates: true });
 
     if (error) {
       throw new Error("تعذر تجهيز ملف المستخدم المالي.");

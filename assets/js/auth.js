@@ -174,7 +174,7 @@
     }
 
     if (message.includes("Email not confirmed")) {
-      return "تم إنشاء الحساب لكن إعدادات المشروع ما زالت تؤخر الدخول المباشر. أعد المحاولة بعد لحظات.";
+      return "تم تجهيز الحساب لكن جلسة الدخول لم تكتمل بعد. أعد المحاولة بعد لحظات.";
     }
 
     if (message.includes("User already registered")) {
