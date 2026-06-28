@@ -6,12 +6,15 @@
   const env = windowObject.MASARIFY_ENV || {};
 
   const supabaseUrl = String(env.SUPABASE_URL || "").trim();
+  const supabasePublishableKey = String(env.SUPABASE_PUBLISHABLE_KEY || "").trim();
   const supabaseAnonKey = String(env.SUPABASE_ANON_KEY || "").trim();
+  const supabaseClientKey = supabasePublishableKey || supabaseAnonKey;
   const looksConfigured =
     Boolean(supabaseUrl) &&
-    Boolean(supabaseAnonKey) &&
+    Boolean(supabaseClientKey) &&
     !supabaseUrl.includes("YOUR_SUPABASE_URL") &&
-    !supabaseAnonKey.includes("YOUR_SUPABASE_ANON_KEY");
+    !supabaseClientKey.includes("YOUR_SUPABASE_PUBLISHABLE_KEY") &&
+    !supabaseClientKey.includes("YOUR_SUPABASE_ANON_KEY");
 
   // هذه الدالة تستخدم تنسيقاً ثابتاً بالريال السعودي في كامل التطبيق.
   function formatCurrency(value) {
@@ -57,7 +60,7 @@
   let supabaseClient = null;
 
   if (looksConfigured && windowObject.supabase?.createClient) {
-    supabaseClient = windowObject.supabase.createClient(supabaseUrl, supabaseAnonKey, {
+    supabaseClient = windowObject.supabase.createClient(supabaseUrl, supabaseClientKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -68,7 +71,9 @@
 
   app.config = {
     supabaseUrl,
+    supabasePublishableKey,
     supabaseAnonKey,
+    supabaseClientKey,
     isConfigured: looksConfigured,
     getMissingConfigMessage
   };

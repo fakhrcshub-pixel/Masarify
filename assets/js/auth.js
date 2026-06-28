@@ -10,6 +10,7 @@
     guest: "index.html",
     dashboard: "dashboard.html"
   };
+  let lastAuthTrigger = null;
 
   function getClient() {
     return app.getSupabase();
@@ -166,10 +167,6 @@
       throw new Error(getFriendlyAuthError(error));
     }
 
-    if (data.user) {
-      await db.ensureProfileRecord(data.user);
-    }
-
     if (data.session) {
       saveSessionCache(data.session);
       redirectTo(PAGE_PATHS.dashboard);
@@ -228,6 +225,7 @@
       return;
     }
 
+    lastAuthTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     modal.classList.remove("hidden");
     modal.classList.add("flex");
     modal.setAttribute("aria-hidden", "false");
@@ -236,14 +234,23 @@
 
   function closeAuthModal() {
     const modal = document.getElementById("authModal");
+    const focusTarget = lastAuthTrigger instanceof HTMLElement ? lastAuthTrigger : null;
 
     if (!modal) {
       return;
     }
 
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
-    modal.setAttribute("aria-hidden", "true");
+    if (focusTarget) {
+      focusTarget.focus();
+    } else if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    windowObject.requestAnimationFrame(function hideModalAfterFocusShift() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      modal.setAttribute("aria-hidden", "true");
+    });
   }
 
   function setAuthTab(tabName) {

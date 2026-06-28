@@ -147,6 +147,7 @@
   }
 
   function openBudgetModal() {
+    dom.lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     dom.budgetModal?.classList.remove("hidden");
     dom.budgetModal?.classList.add("flex");
     dom.budgetModal?.setAttribute("aria-hidden", "false");
@@ -157,9 +158,19 @@
   }
 
   function closeBudgetModal() {
-    dom.budgetModal?.classList.add("hidden");
-    dom.budgetModal?.classList.remove("flex");
-    dom.budgetModal?.setAttribute("aria-hidden", "true");
+    const focusTarget = dom.lastFocusedElement instanceof HTMLElement ? dom.lastFocusedElement : null;
+
+    if (focusTarget) {
+      focusTarget.focus();
+    } else if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    windowObject.requestAnimationFrame(function hideBudgetModalAfterFocusShift() {
+      dom.budgetModal?.classList.add("hidden");
+      dom.budgetModal?.classList.remove("flex");
+      dom.budgetModal?.setAttribute("aria-hidden", "true");
+    });
   }
 
   function getFilteredExpenses() {
