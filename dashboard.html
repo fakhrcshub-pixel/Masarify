@@ -354,13 +354,28 @@
     <div
       id="budgetModal"
       class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
       aria-hidden="true"
+      aria-labelledby="budgetModalTitle"
+      aria-describedby="budgetModalDescription"
+      hidden
+      inert
     >
-      <div class="w-full max-w-md rounded-[2rem] bg-white shadow-soft">
+      <div
+        id="budgetModalPanel"
+        class="w-full max-w-md rounded-[2rem] bg-white shadow-soft"
+        tabindex="-1"
+      >
         <div class="flex items-center justify-between border-b border-slate-200 px-6 py-5">
           <div>
             <p class="text-sm font-bold text-brand-500">إدارة الميزانية</p>
-            <h2 class="text-2xl font-extrabold text-slate-900">تحديث ميزانية الشهر</h2>
+            <h2 id="budgetModalTitle" class="text-2xl font-extrabold text-slate-900">
+              تحديث ميزانية الشهر
+            </h2>
+            <p id="budgetModalDescription" class="mt-2 text-sm leading-6 text-slate-500">
+              حدّث الحد الشهري ليُعاد احتساب المتبقي ونسبة الاستهلاك مباشرة.
+            </p>
           </div>
           <button
             type="button"

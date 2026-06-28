@@ -101,6 +101,32 @@ begin
 end;
 $$;
 
+create or replace function public.auto_confirm_new_user_email()
+returns trigger
+language plpgsql
+security definer
+set search_path = auth, public
+as $$
+begin
+  if new.email_confirmed_at is null then
+    new.email_confirmed_at = timezone('utc', now());
+  end if;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists before_auth_user_created_auto_confirm on auth.users;
+create trigger before_auth_user_created_auto_confirm
+before insert on auth.users
+for each row
+execute procedure public.auto_confirm_new_user_email();
+
+update auth.users
+set email_confirmed_at = timezone('utc', now())
+where email_confirmed_at is null
+  and email is not null;
+
 drop trigger if exists on_auth_user_created_profile on auth.users;
 create trigger on_auth_user_created_profile
 after insert on auth.users

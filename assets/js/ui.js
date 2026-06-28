@@ -16,6 +16,8 @@
   };
 
   const dom = {};
+  const MODAL_FOCUSABLE_SELECTOR =
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
   function cacheDom() {
     dom.toastContainer = document.getElementById("toastContainer");
@@ -47,6 +49,37 @@
     dom.closeBudgetModalButton = document.getElementById("closeBudgetModalButton");
     dom.budgetForm = document.getElementById("budgetForm");
     dom.budgetInput = document.getElementById("budgetInput");
+    dom.budgetModalPanel = document.getElementById("budgetModalPanel");
+  }
+
+  function getFocusableElements(container) {
+    if (!(container instanceof HTMLElement)) {
+      return [];
+    }
+
+    return Array.from(container.querySelectorAll(MODAL_FOCUSABLE_SELECTOR)).filter(function isFocusable(
+      element
+    ) {
+      return !element.hasAttribute("hidden") && !element.closest("[hidden]");
+    });
+  }
+
+  function setBackgroundInert(isInert) {
+    document.querySelectorAll("body > header, body > main").forEach(function syncBackground(node) {
+      if (!(node instanceof HTMLElement)) {
+        return;
+      }
+
+      if (node.contains(dom.budgetModal)) {
+        return;
+      }
+
+      if (isInert) {
+        node.setAttribute("inert", "");
+      } else {
+        node.removeAttribute("inert");
+      }
+    });
   }
 
   function setDashboardMessage(message, type) {
@@ -148,29 +181,70 @@
 
   function openBudgetModal() {
     dom.lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    dom.budgetModal.hidden = false;
+    dom.budgetModal.inert = false;
     dom.budgetModal?.classList.remove("hidden");
     dom.budgetModal?.classList.add("flex");
     dom.budgetModal?.setAttribute("aria-hidden", "false");
+    setBackgroundInert(true);
+    document.body.classList.add("overflow-hidden");
 
     if (dom.budgetInput) {
       dom.budgetInput.value = Number(state.profile?.budget || 0).toFixed(2);
     }
+
+    windowObject.requestAnimationFrame(function focusBudgetField() {
+      dom.budgetInput?.focus();
+    });
   }
 
   function closeBudgetModal() {
     const focusTarget = dom.lastFocusedElement instanceof HTMLElement ? dom.lastFocusedElement : null;
+    setBackgroundInert(false);
+    document.body.classList.remove("overflow-hidden");
+    dom.budgetModal?.classList.add("hidden");
+    dom.budgetModal?.classList.remove("flex");
+    dom.budgetModal?.setAttribute("aria-hidden", "true");
+    dom.budgetModal.hidden = true;
+    dom.budgetModal.inert = true;
 
-    if (focusTarget) {
-      focusTarget.focus();
-    } else if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+    windowObject.requestAnimationFrame(function restoreBudgetTriggerFocus() {
+      if (focusTarget) {
+        focusTarget.focus();
+      }
+    });
+  }
+
+  function handleBudgetModalKeydown(event) {
+    if (dom.budgetModal?.hidden) {
+      return;
     }
 
-    windowObject.requestAnimationFrame(function hideBudgetModalAfterFocusShift() {
-      dom.budgetModal?.classList.add("hidden");
-      dom.budgetModal?.classList.remove("flex");
-      dom.budgetModal?.setAttribute("aria-hidden", "true");
-    });
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeBudgetModal();
+      return;
+    }
+
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const focusableElements = getFocusableElements(dom.budgetModalPanel);
+
+    if (!focusableElements.length) {
+      event.preventDefault();
+      dom.budgetModalPanel?.focus();
+      return;
+    }
+
+    const currentIndex = focusableElements.indexOf(document.activeElement);
+    const nextIndex = event.shiftKey
+      ? (currentIndex <= 0 ? focusableElements.length : currentIndex) - 1
+      : (currentIndex + 1) % focusableElements.length;
+
+    event.preventDefault();
+    focusableElements[nextIndex]?.focus();
   }
 
   function getFilteredExpenses() {
@@ -425,12 +499,16 @@
     });
 
     dom.openBudgetModalButton?.addEventListener("click", openBudgetModal);
+    dom.closeBudgetModalButton?.addEventListener("mousedown", function avoidFocusSteal(event) {
+      event.preventDefault();
+    });
     dom.closeBudgetModalButton?.addEventListener("click", closeBudgetModal);
     dom.budgetModal?.addEventListener("click", function closeOnOverlay(event) {
       if (event.target === dom.budgetModal) {
         closeBudgetModal();
       }
     });
+    dom.budgetModal?.addEventListener("keydown", handleBudgetModalKeydown);
   }
 
   async function initializeDashboard() {
